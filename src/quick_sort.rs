@@ -2,10 +2,8 @@ use rand::{Rng, self};
 
 fn random_partition(vector: &mut [i32]) -> usize {
     let pivot_index = rand::thread_rng().gen_range(0, vector.len());
-    let tmp = vector[vector.len() - 1];
-    vector[vector.len() - 1] = vector[pivot_index];
-    vector[pivot_index] = tmp;
-
+    vector.swap(pivot_index, vector.len() - 1);
+    
     partition(vector)
 
 }
@@ -15,9 +13,7 @@ fn partition(vector: &mut [i32]) -> usize {
     let mut i = 0;
     for j in 0..vector.len() - 1 {
         if vector[j] < pivot {
-            let tmp = vector[j];
-            vector[j] = vector[i];
-            vector[i] = tmp;
+            vector.swap(i, j);
             i += 1;
         }
     }
