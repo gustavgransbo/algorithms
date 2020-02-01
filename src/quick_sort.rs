@@ -15,10 +15,10 @@ fn partition(vector: &mut [i32]) -> usize {
     return i;
 }
 
-pub fn quick_sort(mut vector: &mut [i32]){
+pub fn quick_sort(vector: &mut [i32]){
     if vector.len() < 2 { return; }
 
-    let q = partition(&mut vector);
+    let q = partition(vector);
 
     quick_sort(&mut vector[..q]);
     quick_sort(&mut vector[q+1..]);
