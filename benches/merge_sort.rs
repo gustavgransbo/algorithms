@@ -24,7 +24,7 @@ fn read_test_data(path: &str) -> Result<Vec<i32>, Error> {
 
 fn big_input_one_million(c: &mut Criterion){
     let data = read_test_data("benches/data/sorting_1M.in").unwrap();
-    c.bench_function("Big Input 1M", 
+    c.bench_function("Mergesort - Big Input 1M", 
         |b| b.iter_batched_ref(
             || data.clone(),
             |mut data| merge_sort(&mut data),
@@ -35,7 +35,7 @@ fn big_input_one_million(c: &mut Criterion){
 
 fn big_input_ten_thousand(c: &mut Criterion){
     let data = read_test_data("benches/data/sorting_10K.in").unwrap();
-    c.bench_function("Big Input 10K", 
+    c.bench_function("Mergesort - Big Input 10K", 
         |b| b.iter_batched_ref(
             || data.clone(),
             |mut data| merge_sort(&mut data),

@@ -24,7 +24,7 @@ fn read_test_data(path: &str) -> Result<Vec<i32>, Error> {
 
 fn big_input_one_million(c: &mut Criterion){
     let data = read_test_data("benches/data/sorting_1M.in").unwrap();
-    c.bench_function("Big Input 1M", 
+    c.bench_function("Quicksort - Big Input 1M", 
         |b| b.iter_batched_ref(
             || data.clone(),
             |mut data| quick_sort(&mut data),
@@ -35,7 +35,18 @@ fn big_input_one_million(c: &mut Criterion){
 
 fn big_input_ten_thousand(c: &mut Criterion){
     let data = read_test_data("benches/data/sorting_10K.in").unwrap();
-    c.bench_function("Big Input 10K", 
+    c.bench_function("Quicksort - Big Input 10K", 
+        |b| b.iter_batched_ref(
+            || data.clone(),
+            |mut data| quick_sort(&mut data),
+            BatchSize::SmallInput
+        )
+    );
+}
+
+fn big_input_ten_thousand_sorted(c: &mut Criterion){
+    let data = read_test_data("benches/data/sorting_sorted_10K.in").unwrap();
+    c.bench_function("Quicksort - Big Input 10K Sorted", 
         |b| b.iter_batched_ref(
             || data.clone(),
             |mut data| quick_sort(&mut data),
@@ -47,6 +58,6 @@ fn big_input_ten_thousand(c: &mut Criterion){
 criterion_group!{
     name=benches;
     config = Criterion::default().sample_size(30);
-    targets = big_input_ten_thousand, big_input_one_million
+    targets = big_input_ten_thousand, big_input_one_million, big_input_ten_thousand_sorted
 }
 criterion_main!(benches);
