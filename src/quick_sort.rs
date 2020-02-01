@@ -1,3 +1,15 @@
+use rand::{Rng, self};
+
+fn random_partition(vector: &mut [i32]) -> usize {
+    let pivot_index = rand::thread_rng().gen_range(0, vector.len());
+    let tmp = vector[vector.len() - 1];
+    vector[vector.len() - 1] = vector[pivot_index];
+    vector[pivot_index] = tmp;
+
+    partition(vector)
+
+}
+
 fn partition(vector: &mut [i32]) -> usize {
     let pivot = vector[vector.len()-1];
     let mut i = 0;
@@ -18,7 +30,7 @@ fn partition(vector: &mut [i32]) -> usize {
 pub fn quick_sort(vector: &mut [i32]){
     if vector.len() < 2 { return; }
 
-    let q = partition(vector);
+    let q = random_partition(vector);
 
     quick_sort(&mut vector[..q]);
     quick_sort(&mut vector[q+1..]);
