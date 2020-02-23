@@ -1,12 +1,12 @@
-struct InPlaceHeap<'a> {
-    elements: &'a mut [i32],
+struct InPlaceHeap<'a, T: PartialOrd + Copy> {
+    elements: &'a mut [T],
     heap_size: usize,
 }
 
-impl InPlaceHeap<'_> {
+impl<T: PartialOrd + Copy> InPlaceHeap<'_, T> {
     pub fn heapify(&mut self, i: usize) {
-        let l = InPlaceHeap::left(i);
-        let r = InPlaceHeap::right(i);
+        let l = InPlaceHeap::<T>::left(i);
+        let r = InPlaceHeap::<T>::right(i);
         let mut largets_element = i;
         if l < self.heap_size && self.elements[l] > self.elements[i] {
             largets_element = l;
@@ -28,7 +28,7 @@ impl InPlaceHeap<'_> {
         }
     }
 
-    pub fn build_heap<'a>(vector: &'a mut [i32]) -> InPlaceHeap<'a> {
+    pub fn build_heap<'a>(vector: &'a mut [T]) -> InPlaceHeap<'a, T> {
         let size = vector.len();
         let mut heap = InPlaceHeap {elements: vector, heap_size: size};
         for i in (0..size/2).rev() {
@@ -46,7 +46,7 @@ impl InPlaceHeap<'_> {
     }
 }
 
-pub fn heap_sort(vector: &mut [i32]){
+pub fn heap_sort<T: PartialOrd + Copy>(vector: &mut [T]){
 
     let mut heap = InPlaceHeap::build_heap(vector);
     heap.heap_sort();
@@ -58,7 +58,7 @@ mod tests {
 
     #[test]
     fn empty() {
-        let mut v = vec![];
+        let mut v: Vec<i32> = vec![];
         heap_sort(&mut v);
         assert_eq!(v, vec![]);
     }
@@ -82,5 +82,12 @@ mod tests {
         let mut v = vec![3, 1, 2];
         heap_sort(&mut v);
         assert_eq!(v, vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn sort_chars() {
+        let mut v = vec!['a', 'b', 'b', 'a'];
+        heap_sort(&mut v);
+        assert_eq!(v, vec!['a', 'a', 'b', 'b']);
     }
 }
