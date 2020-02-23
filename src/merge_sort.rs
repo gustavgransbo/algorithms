@@ -1,4 +1,4 @@
-fn merge(left_vector: &[i32], right_vector: &[i32], result: &mut [i32]){
+fn merge<T: PartialOrd + Copy>(left_vector: &[T], right_vector: &[T], result: &mut [T]){
 
     let mut left_id = 0;
     let mut right_id = 0;
@@ -21,7 +21,7 @@ fn merge(left_vector: &[i32], right_vector: &[i32], result: &mut [i32]){
     }
 }
 
-pub fn merge_sort(vector: &mut [i32]){
+pub fn merge_sort<T: PartialOrd + Copy>(vector: &mut [T]){
     let mid = vector.len() / 2;
     if mid == 0 {
         return;
@@ -44,7 +44,7 @@ mod tests {
 
     #[test]
     fn empy() {
-        let mut v = vec![];
+        let mut v: Vec<i32> = vec![];
         merge_sort(&mut v);
         assert_eq!(v, vec![]);
     }
@@ -68,6 +68,13 @@ mod tests {
         let mut v = vec![3, 1, 2];
         merge_sort(&mut v);
         assert_eq!(v, vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn sort_chars() {
+        let mut v = vec!['a', 'b', 'b', 'a'];
+        merge_sort(&mut v);
+        assert_eq!(v, vec!['a', 'a', 'b', 'b']);
     }
 }
 
