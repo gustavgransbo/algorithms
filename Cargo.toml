@@ -23,3 +23,7 @@ harness = false
 [[bench]]
 name = "heap_sort"
 harness = false
+
+[[bench]]
+name = "aho_corasick"
+harness = false
