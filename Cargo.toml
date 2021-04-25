@@ -12,6 +12,9 @@ rand = "0.7.3"
 [dev-dependencies]
 criterion = "0.3"
 
+[features]
+test = []
+
 [[bench]]
 name = "merge_sort"
 harness = false
