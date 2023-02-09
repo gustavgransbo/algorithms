@@ -112,8 +112,9 @@ impl<T: Hash> HyperLogLog<T> {
     /// Creates a new HyperLogLog by merging this instance with another
     pub fn merge(&mut self, other: &Self) -> Self {
         let mut registers = [0; M];
-        for i in 0..M {
-            registers[i] = self.registers[i].max(other.registers[i]);
+        let it = self.registers.iter().zip(other.registers.iter());
+        for (i, (v1, v2)) in it.enumerate() {
+            registers[i] = *v1.max(v2);
         }
         Self {
             registers,
