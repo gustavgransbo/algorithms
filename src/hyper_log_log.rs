@@ -123,6 +123,13 @@ impl<T: Hash> HyperLogLog<T> {
     }
 }
 
+
+impl<T: Hash> Default for  HyperLogLog<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[cfg(test)]
 mod test {
 
