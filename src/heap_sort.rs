@@ -28,7 +28,7 @@ impl<T: PartialOrd + Copy> InPlaceHeap<'_, T> {
         }
     }
 
-    pub fn build_heap<'a>(vector: &'a mut [T]) -> InPlaceHeap<'a, T> {
+    pub fn build_heap(vector: & mut [T]) -> InPlaceHeap<'_, T> {
         let size = vector.len();
         let mut heap = InPlaceHeap {elements: vector, heap_size: size};
         for i in (0..size/2).rev() {
