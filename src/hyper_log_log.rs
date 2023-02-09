@@ -143,10 +143,8 @@ mod test {
         let error_rate = error_rate(estimated_count, true_count);
         assert!(
             error_rate < acceptable_error_rate,
-            format!(
-                "Expected and error rate less than {:.6}, got {:.6}",
-                acceptable_error_rate, error_rate
-            ),
+            "Expected and error rate less than {:.6}, got {:.6}",
+            acceptable_error_rate, error_rate
         );
     }
 
@@ -193,7 +191,8 @@ mod test {
         let distinct = hll.count();
         assert!(
             distinct <= 5 && distinct >= 3,
-            format!("Distinct elements: {}, found {}", true_distinct, distinct)
+            "Distinct elements: {}, found {}",
+            true_distinct, distinct
         );
     }
     #[test]
