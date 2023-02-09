@@ -134,7 +134,7 @@ impl PatternFinder {
     /// assert_eq!(pattern_locations[&String::from("oof")], vec![1]);
     /// assert_eq!(pattern_locations[&String::from("o")], vec![1, 2]);
     /// ```
-    pub fn find_patterns(&self, text: &String) -> HashMap<String, Vec<usize>> {
+    pub fn find_patterns(&self, text: &str) -> HashMap<String, Vec<usize>> {
         let mut result: HashMap<String, Vec<usize>> = HashMap::new();
         let mut state = Some(Rc::clone(&self.root_state));
         for (i, c) in text.char_indices() {
