@@ -20,7 +20,7 @@ fn partition<T: PartialOrd + Copy>(vector: &mut [T]) -> usize {
     *vector.last_mut().unwrap() = vector[i];
     vector[i] = pivot;
 
-    return i;
+    i
 }
 
 pub fn quick_sort<T: PartialOrd + Copy>(vector: &mut [T]){
