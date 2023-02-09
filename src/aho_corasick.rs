@@ -159,7 +159,7 @@ impl PatternFinder {
 impl State {
     fn next_state(&self, value: &char) -> Option<Rc<RefCell<State>>> {
         if let Some(state) = self.next_states.get(value) {
-            return Some(Rc::clone(state));
+            Some(Rc::clone(state))
         } else if self.fail_state.is_some() {
             self.fail_state.as_ref().unwrap().borrow().next_state(value)
         } else {
