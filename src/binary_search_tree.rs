@@ -35,6 +35,41 @@ impl<T: PartialOrd> BinarySearchTree<T> {
         }
     }
 
+    fn find_and_delete_min(&mut self) -> T {
+        if self.node.as_ref().unwrap().left.node.is_some() {
+            self.node.as_mut().unwrap().left.find_and_delete_min()
+        } else {
+            let mut node = self.node.take().unwrap();
+            self.node = node.right.node.take();
+            node.item
+        }
+    }
+
+    fn delete_node(&mut self) {
+        let node = self.node.as_mut().unwrap();
+        if node.left.node.is_some() && node.right.node.is_some() {
+            node.item = node.right.find_and_delete_min();
+        } else if node.left.node.is_some() {
+            self.node = node.left.node.take();
+        } else if node.right.node.is_some() {
+            self.node = node.right.node.take();
+        } else {
+            self.node = None;
+        }
+    }
+
+    pub fn delete(&mut self, item: T) {
+        if let Some(node) = &mut self.node {
+            if item > node.item {
+                node.right.delete(item);
+            } else if item < node.item {
+                node.left.delete(item);
+            } else {
+                self.delete_node();
+            }
+        }
+    }
+
     pub fn contains(&self, item: T) -> bool {
         if let Some(node) = &self.node {
             if item > node.item {
@@ -98,5 +133,67 @@ mod tests {
         for i in 1..7 {
             assert!(bst.contains(i));
         }
+    }
+
+    #[test]
+    fn deleted_item_does_not_exist() {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(1);
+        bst.delete(1);
+
+        assert!(!bst.contains(1));
+    }
+
+    #[test]
+    fn delete_item_that_does_not_exist() {
+        let mut bst = BinarySearchTree::new();
+        bst.delete(1);
+    }
+
+    #[test]
+    fn other_items_exist_after_root_with_only_right_child_deleted() {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(1);
+        bst.insert(3);
+        bst.insert(2);
+        bst.delete(1);
+
+        assert!(bst.contains(2));
+        assert!(bst.contains(3));
+
+        assert!(!bst.contains(1));
+    }
+
+    #[test]
+    fn other_items_exist_after_root_with_only_left_child_deleted() {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(3);
+        bst.insert(1);
+        bst.insert(2);
+        bst.delete(3);
+
+        assert!(bst.contains(1));
+        assert!(bst.contains(2));
+
+        assert!(!bst.contains(3));
+    }
+
+    #[test]
+    fn other_items_exist_after_root_with_two_children_deleted() {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(2);
+        bst.insert(1);
+        bst.insert(5);
+        bst.insert(3);
+        // The roots succeeding node gets a right child
+        bst.insert(4);
+
+        bst.delete(2);
+
+        assert!(bst.contains(1));
+        assert!(bst.contains(3));
+        assert!(bst.contains(4));
+        assert!(bst.contains(5));
+        assert!(!bst.contains(2));
     }
 }
