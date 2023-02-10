@@ -124,8 +124,7 @@ impl<T: Hash> HyperLogLog<T> {
     }
 }
 
-
-impl<T: Hash> Default for  HyperLogLog<T> {
+impl<T: Hash> Default for HyperLogLog<T> {
     fn default() -> Self {
         Self::new()
     }
@@ -152,7 +151,8 @@ mod test {
         assert!(
             error_rate < acceptable_error_rate,
             "Expected and error rate less than {:.6}, got {:.6}",
-            acceptable_error_rate, error_rate
+            acceptable_error_rate,
+            error_rate
         );
     }
 
@@ -200,7 +200,8 @@ mod test {
         assert!(
             distinct <= 5 && distinct >= 3,
             "Distinct elements: {}, found {}",
-            true_distinct, distinct
+            true_distinct,
+            distinct
         );
     }
     #[test]

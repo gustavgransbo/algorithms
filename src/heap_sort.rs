@@ -28,10 +28,13 @@ impl<T: PartialOrd + Copy> InPlaceHeap<'_, T> {
         }
     }
 
-    pub fn build_heap(vector: & mut [T]) -> InPlaceHeap<'_, T> {
+    pub fn build_heap(vector: &mut [T]) -> InPlaceHeap<'_, T> {
         let size = vector.len();
-        let mut heap = InPlaceHeap {elements: vector, heap_size: size};
-        for i in (0..size/2).rev() {
+        let mut heap = InPlaceHeap {
+            elements: vector,
+            heap_size: size,
+        };
+        for i in (0..size / 2).rev() {
             heap.heapify(i);
         }
         heap
@@ -42,12 +45,11 @@ impl<T: PartialOrd + Copy> InPlaceHeap<'_, T> {
     }
 
     fn right(i: usize) -> usize {
-        2 * (i + 1) 
+        2 * (i + 1)
     }
 }
 
-pub fn heap_sort<T: PartialOrd + Copy>(vector: &mut [T]){
-
+pub fn heap_sort<T: PartialOrd + Copy>(vector: &mut [T]) {
     let mut heap = InPlaceHeap::build_heap(vector);
     heap.heap_sort();
 }

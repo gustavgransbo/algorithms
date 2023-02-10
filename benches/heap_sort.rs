@@ -1,6 +1,5 @@
-use criterion::{criterion_group, criterion_main, Criterion, BatchSize};
 use algorithms::heap_sort::heap_sort;
-
+use criterion::{criterion_group, criterion_main, BatchSize, Criterion};
 
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error, ErrorKind};
@@ -22,40 +21,40 @@ fn read_test_data(path: &str) -> Result<Vec<i32>, Error> {
     Ok(v)
 }
 
-fn big_input_one_million(c: &mut Criterion){
+fn big_input_one_million(c: &mut Criterion) {
     let data = read_test_data("benches/data/sorting_1M.in").unwrap();
-    c.bench_function("Heapsort - Big Input 1M", 
-        |b| b.iter_batched_ref(
+    c.bench_function("Heapsort - Big Input 1M", |b| {
+        b.iter_batched_ref(
             || data.clone(),
             |mut data| heap_sort(&mut data),
-            BatchSize::LargeInput
+            BatchSize::LargeInput,
         )
-    );
+    });
 }
 
-fn big_input_ten_thousand(c: &mut Criterion){
+fn big_input_ten_thousand(c: &mut Criterion) {
     let data = read_test_data("benches/data/sorting_10K.in").unwrap();
-    c.bench_function("Heapsort - Big Input 10K", 
-        |b| b.iter_batched_ref(
+    c.bench_function("Heapsort - Big Input 10K", |b| {
+        b.iter_batched_ref(
             || data.clone(),
             |mut data| heap_sort(&mut data),
-            BatchSize::SmallInput
+            BatchSize::SmallInput,
         )
-    );
+    });
 }
 
-fn big_input_ten_thousand_sorted(c: &mut Criterion){
+fn big_input_ten_thousand_sorted(c: &mut Criterion) {
     let data = read_test_data("benches/data/sorting_sorted_10K.in").unwrap();
-    c.bench_function("Heapsort - Big Input 10K Sorted", 
-        |b| b.iter_batched_ref(
+    c.bench_function("Heapsort - Big Input 10K Sorted", |b| {
+        b.iter_batched_ref(
             || data.clone(),
             |mut data| heap_sort(&mut data),
-            BatchSize::SmallInput
+            BatchSize::SmallInput,
         )
-    );
+    });
 }
 
-criterion_group!{
+criterion_group! {
     name=benches;
     config = Criterion::default().sample_size(30);
     targets = big_input_ten_thousand, big_input_one_million, big_input_ten_thousand_sorted
