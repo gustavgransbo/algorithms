@@ -55,6 +55,12 @@ mod tests {
     use super::*;
 
     #[test]
+    fn empty_tree_doesnt_contain_element() {
+        let bst = BinarySearchTree::new();
+        assert!(!bst.contains(1));
+    }
+
+    #[test]
     fn inserted_element_exists() {
         let mut bst = BinarySearchTree::new();
         bst.insert(1);
@@ -69,7 +75,7 @@ mod tests {
     }
 
     #[test]
-    fn multiple_inserts() {
+    fn two_inserted_elements_exist() {
         let mut bst = BinarySearchTree::new();
         bst.insert('a');
         bst.insert('c');
@@ -77,5 +83,20 @@ mod tests {
         assert!(bst.contains('a'));
         assert!(bst.contains('c'));
         assert!(!bst.contains('b'));
+    }
+
+    #[test]
+    fn multiple_inserted_items_exist() {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(5);
+        bst.insert(6);
+        bst.insert(3);
+        bst.insert(4);
+        bst.insert(2);
+        bst.insert(1);
+
+        for i in 1..7 {
+            assert!(bst.contains(i));
+        }
     }
 }
