@@ -18,6 +18,12 @@ pub struct BinarySearchTree<T: PartialOrd> {
     node: Option<Box<Node<T>>>,
 }
 
+impl<T: PartialOrd> Default for BinarySearchTree<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T: PartialOrd> BinarySearchTree<T> {
     pub fn new() -> Self {
         Self { node: None }
