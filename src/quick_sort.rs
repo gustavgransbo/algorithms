@@ -1,15 +1,14 @@
-use rand::{Rng, self};
+use rand::{self, Rng};
 
 fn random_partition<T: PartialOrd + Copy>(vector: &mut [T]) -> usize {
     let pivot_index = rand::thread_rng().gen_range(0, vector.len());
     vector.swap(pivot_index, vector.len() - 1);
-    
-    partition(vector)
 
+    partition(vector)
 }
 
 fn partition<T: PartialOrd + Copy>(vector: &mut [T]) -> usize {
-    let pivot = vector[vector.len()-1];
+    let pivot = vector[vector.len() - 1];
     let mut i = 0;
     for j in 0..vector.len() - 1 {
         if vector[j] < pivot {
@@ -20,19 +19,19 @@ fn partition<T: PartialOrd + Copy>(vector: &mut [T]) -> usize {
     *vector.last_mut().unwrap() = vector[i];
     vector[i] = pivot;
 
-    return i;
+    i
 }
 
-pub fn quick_sort<T: PartialOrd + Copy>(vector: &mut [T]){
-    if vector.len() < 2 { return; }
+pub fn quick_sort<T: PartialOrd + Copy>(vector: &mut [T]) {
+    if vector.len() < 2 {
+        return;
+    }
 
     let q = random_partition(vector);
 
     quick_sort(&mut vector[..q]);
-    quick_sort(&mut vector[q+1..]);
-
+    quick_sort(&mut vector[q + 1..]);
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -65,7 +64,7 @@ mod tests {
         quick_sort(&mut v);
         assert_eq!(v, vec![1, 2, 3]);
     }
-    
+
     #[test]
     fn sort_chars() {
         let mut v = vec!['a', 'b', 'b', 'a'];
@@ -73,4 +72,3 @@ mod tests {
         assert_eq!(v, vec!['a', 'a', 'b', 'b']);
     }
 }
-

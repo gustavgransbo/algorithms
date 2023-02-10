@@ -1,5 +1,4 @@
-fn merge<T: PartialOrd + Copy>(left_vector: &[T], right_vector: &[T], result: &mut [T]){
-
+fn merge<T: PartialOrd + Copy>(left_vector: &[T], right_vector: &[T], result: &mut [T]) {
     let mut left_id = 0;
     let mut right_id = 0;
     let mut insert_id = 0;
@@ -21,7 +20,7 @@ fn merge<T: PartialOrd + Copy>(left_vector: &[T], right_vector: &[T], result: &m
     }
 }
 
-pub fn merge_sort<T: PartialOrd + Copy>(vector: &mut [T]){
+pub fn merge_sort<T: PartialOrd + Copy>(vector: &mut [T]) {
     let mid = vector.len() / 2;
     if mid == 0 {
         return;
@@ -34,9 +33,7 @@ pub fn merge_sort<T: PartialOrd + Copy>(vector: &mut [T]){
     merge(&vector[..mid], &vector[mid..], &mut intermediary_vector);
 
     vector.copy_from_slice(&intermediary_vector);
-    
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -77,4 +74,3 @@ mod tests {
         assert_eq!(v, vec!['a', 'a', 'b', 'b']);
     }
 }
-

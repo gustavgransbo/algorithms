@@ -112,14 +112,21 @@ impl<T: Hash> HyperLogLog<T> {
     /// Creates a new HyperLogLog by merging this instance with another
     pub fn merge(&mut self, other: &Self) -> Self {
         let mut registers = [0; M];
-        for i in 0..M {
-            registers[i] = self.registers[i].max(other.registers[i]);
+        let it = self.registers.iter().zip(other.registers.iter());
+        for (i, (v1, v2)) in it.enumerate() {
+            registers[i] = *v1.max(v2);
         }
         Self {
             registers,
             hash_builder: BuildHasherDefault::<DefaultHasher>::default(),
             _marker: PhantomData,
         }
+    }
+}
+
+impl<T: Hash> Default for HyperLogLog<T> {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -143,10 +150,9 @@ mod test {
         let error_rate = error_rate(estimated_count, true_count);
         assert!(
             error_rate < acceptable_error_rate,
-            format!(
-                "Expected and error rate less than {:.6}, got {:.6}",
-                acceptable_error_rate, error_rate
-            ),
+            "Expected and error rate less than {:.6}, got {:.6}",
+            acceptable_error_rate,
+            error_rate
         );
     }
 
@@ -193,7 +199,9 @@ mod test {
         let distinct = hll.count();
         assert!(
             distinct <= 5 && distinct >= 3,
-            format!("Distinct elements: {}, found {}", true_distinct, distinct)
+            "Distinct elements: {}, found {}",
+            true_distinct,
+            distinct
         );
     }
     #[test]
