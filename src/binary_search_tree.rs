@@ -202,4 +202,30 @@ mod tests {
         assert!(bst.contains(5));
         assert!(!bst.contains(2));
     }
+
+    #[test]
+    fn delete_left_child() {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(3);
+        bst.insert(1);
+        bst.insert(2);
+        bst.delete(1);
+
+        assert!(!bst.contains(1));
+        assert!(bst.contains(2));
+        assert!(bst.contains(3));
+    }
+
+    #[test]
+    fn delete_right_child() {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(1);
+        bst.insert(2);
+        bst.insert(3);
+        bst.delete(2);
+
+        assert!(bst.contains(1));
+        assert!(!bst.contains(2));
+        assert!(bst.contains(3));
+    }
 }
