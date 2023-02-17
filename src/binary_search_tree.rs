@@ -79,17 +79,15 @@ impl<T: Ord> BinarySearchTree<T> {
     }
 
     pub fn contains(&self, item: T) -> bool {
-        if let Some(node) = &self.node {
-            if item > node.item {
-                node.right.contains(item)
-            } else if item < node.item {
-                node.left.contains(item)
-            } else {
-                true
+        let mut bst = self;
+        while let Some(ref node) = bst.node {
+            match item.cmp(&node.item) {
+                Ordering::Greater => bst = &node.right,
+                Ordering::Less => bst = &node.left,
+                Ordering::Equal => return true,
             }
-        } else {
-            false
         }
+        false
     }
 }
 
