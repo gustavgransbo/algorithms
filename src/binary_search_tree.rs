@@ -32,15 +32,15 @@ impl<T: Ord> BinarySearchTree<T> {
     }
 
     pub fn insert(&mut self, item: T) {
-        if let Some(node) = &mut self.node {
-            if item > node.item {
-                node.right.insert(item);
-            } else if item < node.item {
-                node.left.insert(item);
+        let mut bst = self;
+        while let Some(ref mut node) = bst.node {
+            match item.cmp(&node.item) {
+                Ordering::Greater => bst = &mut node.right,
+                Ordering::Less => bst = &mut node.left,
+                Ordering::Equal => return,
             }
-        } else {
-            self.node = Some(Box::new(Node::new(item)));
         }
+        (*bst).node = Some(Box::new(Node::new(item)));
     }
 
     fn find_and_delete_min(&mut self) -> T {
