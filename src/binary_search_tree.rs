@@ -1,10 +1,12 @@
-struct Node<T: PartialOrd> {
+use std::cmp::Ordering;
+
+struct Node<T: Ord> {
     item: T,
     left: BinarySearchTree<T>,
     right: BinarySearchTree<T>,
 }
 
-impl<T: PartialOrd> Node<T> {
+impl<T: Ord> Node<T> {
     fn new(item: T) -> Self {
         Node {
             item,
@@ -14,17 +16,17 @@ impl<T: PartialOrd> Node<T> {
     }
 }
 
-pub struct BinarySearchTree<T: PartialOrd> {
+pub struct BinarySearchTree<T: Ord> {
     node: Option<Box<Node<T>>>,
 }
 
-impl<T: PartialOrd> Default for BinarySearchTree<T> {
+impl<T: Ord> Default for BinarySearchTree<T> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<T: PartialOrd> BinarySearchTree<T> {
+impl<T: Ord> BinarySearchTree<T> {
     pub fn new() -> Self {
         Self { node: None }
     }
