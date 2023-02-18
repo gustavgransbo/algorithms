@@ -44,13 +44,13 @@ impl<T: Ord> BinarySearchTree<T> {
     }
 
     fn find_and_delete_min(&mut self) -> T {
-        if self.node.as_ref().unwrap().left.node.is_some() {
-            self.node.as_mut().unwrap().left.find_and_delete_min()
-        } else {
-            let mut node = self.node.take().unwrap();
-            self.node = node.right.node.take();
-            node.item
+        let mut bst = self;
+        while bst.node.as_ref().unwrap().left.node.is_some() {
+            bst = &mut bst.node.as_mut().unwrap().left;
         }
+        let mut node = bst.node.take().unwrap();
+        (*bst).node = node.right.node.take();
+        node.item
     }
 
     fn delete_node(&mut self) {
