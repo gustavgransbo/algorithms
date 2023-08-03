@@ -1,10 +1,12 @@
-struct Node<T: PartialOrd> {
+use std::cmp::Ordering;
+
+struct Node<T: Ord> {
     item: T,
     left: BinarySearchTree<T>,
     right: BinarySearchTree<T>,
 }
 
-impl<T: PartialOrd> Node<T> {
+impl<T: Ord> Node<T> {
     fn new(item: T) -> Self {
         Node {
             item,
@@ -14,41 +16,41 @@ impl<T: PartialOrd> Node<T> {
     }
 }
 
-pub struct BinarySearchTree<T: PartialOrd> {
+pub struct BinarySearchTree<T: Ord> {
     node: Option<Box<Node<T>>>,
 }
 
-impl<T: PartialOrd> Default for BinarySearchTree<T> {
+impl<T: Ord> Default for BinarySearchTree<T> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<T: PartialOrd> BinarySearchTree<T> {
+impl<T: Ord> BinarySearchTree<T> {
     pub fn new() -> Self {
         Self { node: None }
     }
 
     pub fn insert(&mut self, item: T) {
-        if let Some(node) = &mut self.node {
-            if item > node.item {
-                node.right.insert(item);
-            } else if item < node.item {
-                node.left.insert(item);
+        let mut bst = self;
+        while let Some(ref mut node) = bst.node {
+            match item.cmp(&node.item) {
+                Ordering::Greater => bst = &mut node.right,
+                Ordering::Less => bst = &mut node.left,
+                Ordering::Equal => return,
             }
-        } else {
-            self.node = Some(Box::new(Node::new(item)));
         }
+        bst.node = Some(Box::new(Node::new(item)));
     }
 
     fn find_and_delete_min(&mut self) -> T {
-        if self.node.as_ref().unwrap().left.node.is_some() {
-            self.node.as_mut().unwrap().left.find_and_delete_min()
-        } else {
-            let mut node = self.node.take().unwrap();
-            self.node = node.right.node.take();
-            node.item
+        let mut bst = self;
+        while bst.node.as_ref().unwrap().left.node.is_some() {
+            bst = &mut bst.node.as_mut().unwrap().left;
         }
+        let mut node = bst.node.take().unwrap();
+        bst.node = node.right.node.take();
+        node.item
     }
 
     fn delete_node(&mut self) {
@@ -65,29 +67,26 @@ impl<T: PartialOrd> BinarySearchTree<T> {
     }
 
     pub fn delete(&mut self, item: T) {
-        if let Some(node) = &mut self.node {
-            if item > node.item {
-                node.right.delete(item);
-            } else if item < node.item {
-                node.left.delete(item);
-            } else {
-                self.delete_node();
+        let mut bst = self;
+        while bst.node.is_some() {
+            match item.cmp(&bst.node.as_ref().unwrap().item) {
+                Ordering::Greater => bst = &mut bst.node.as_mut().unwrap().right,
+                Ordering::Less => bst = &mut bst.node.as_mut().unwrap().left,
+                Ordering::Equal => bst.delete_node(),
             }
         }
     }
 
     pub fn contains(&self, item: T) -> bool {
-        if let Some(node) = &self.node {
-            if item > node.item {
-                node.right.contains(item)
-            } else if item < node.item {
-                node.left.contains(item)
-            } else {
-                true
+        let mut bst = self;
+        while let Some(ref node) = bst.node {
+            match item.cmp(&node.item) {
+                Ordering::Greater => bst = &node.right,
+                Ordering::Less => bst = &node.left,
+                Ordering::Equal => return true,
             }
-        } else {
-            false
         }
+        false
     }
 }
 
@@ -201,5 +200,31 @@ mod tests {
         assert!(bst.contains(4));
         assert!(bst.contains(5));
         assert!(!bst.contains(2));
+    }
+
+    #[test]
+    fn delete_left_child() {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(3);
+        bst.insert(1);
+        bst.insert(2);
+        bst.delete(1);
+
+        assert!(!bst.contains(1));
+        assert!(bst.contains(2));
+        assert!(bst.contains(3));
+    }
+
+    #[test]
+    fn delete_right_child() {
+        let mut bst = BinarySearchTree::new();
+        bst.insert(1);
+        bst.insert(2);
+        bst.insert(3);
+        bst.delete(2);
+
+        assert!(bst.contains(1));
+        assert!(!bst.contains(2));
+        assert!(bst.contains(3));
     }
 }
