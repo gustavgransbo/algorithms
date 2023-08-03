@@ -67,13 +67,12 @@ impl<T: Ord> BinarySearchTree<T> {
     }
 
     pub fn delete(&mut self, item: T) {
-        if let Some(node) = &mut self.node {
-            if item > node.item {
-                node.right.delete(item);
-            } else if item < node.item {
-                node.left.delete(item);
-            } else {
-                self.delete_node();
+        let mut bst = self;
+        while bst.node.is_some() {
+            match item.cmp(&bst.node.as_ref().unwrap().item) {
+                Ordering::Greater => bst = &mut bst.node.as_mut().unwrap().right,
+                Ordering::Less => bst = &mut bst.node.as_mut().unwrap().left,
+                Ordering::Equal => bst.delete_node(),
             }
         }
     }
