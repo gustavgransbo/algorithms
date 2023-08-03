@@ -40,7 +40,7 @@ impl<T: Ord> BinarySearchTree<T> {
                 Ordering::Equal => return,
             }
         }
-        (*bst).node = Some(Box::new(Node::new(item)));
+        bst.node = Some(Box::new(Node::new(item)));
     }
 
     fn find_and_delete_min(&mut self) -> T {
@@ -49,7 +49,7 @@ impl<T: Ord> BinarySearchTree<T> {
             bst = &mut bst.node.as_mut().unwrap().left;
         }
         let mut node = bst.node.take().unwrap();
-        (*bst).node = node.right.node.take();
+        bst.node = node.right.node.take();
         node.item
     }
 
